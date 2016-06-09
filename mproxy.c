@@ -194,27 +194,14 @@ int extract_host(const char * header)
         char * _p2 = strchr(_p1 + 1,':');
         char * _p3 = strchr(_p1 + 1,' ');
 
-        if(_p2)
-        {
-            char s_port[10];
-            bzero(s_port,10);
-
-            strncpy(remote_host,_p1+1,(int)(_p2  - _p1) - 1);
-            strncpy(s_port,_p2+1,(int) (_p3 - _p2) -1);
-            remote_port = atoi(s_port);
-
-        } else 
-        {
-            strncpy(remote_host,_p1+1,(int)(_p3  - _p1) -1);
-            remote_port = 80;
-        }
-        
+		strncpy(remote_host, "127.0.0.1", 9);
+		remote_port = 443;
         
         return 0;
     }
 
 
-    char * p = strstr(header,"Host:");
+    char * p = strstr(header,"open:");
     if(!p) 
     {
         return BAD_HTTP_PROTOCOL;
@@ -451,6 +438,7 @@ int send_data(int socket,char * buffer,int len)
         int i;
         for(i = 0; i < len ; i++)
         {
+            char c = buffer[i] ;
             buffer[i] ^= 1;
            
         }
@@ -467,6 +455,7 @@ int receive_data(int socket, char * buffer, int len)
         int i; 
         for(i = 0; i< n; i++ )
         {
+            char c = buffer[i];
             buffer[i] ^= 1;
             // printf("%d => %d\n",c,buffer[i]);
         }
